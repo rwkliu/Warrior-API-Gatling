@@ -10,16 +10,16 @@ import io.gatling.javaapi.http.*;
 import java.util.concurrent.ThreadLocalRandom;
 public class warriorDatabaseSimulation extends Simulation {
     // Add the HttpProtocolBuilder
-    HttpProtocolBuilder httpProtocol = http.baseUrl("http://127.0.0.1:5000/")
+    HttpProtocolBuilder httpProtocol = http.baseUrl("http://127.0.0.1/")
         .acceptHeader("application/json")
         .contentTypeHeader("application/json");
 
     // Add the ScenarioBuilder
     ScenarioBuilder myScenario = scenario("My Scenario")
         .exec(
-            http("Request 1").get("/"),
+            http("Landing Page").get("/"),
             pause(2),
-            http("Request 2")
+            http("Find Neo")
                 .get("warrior?t=Neo")
                 .check(status().is(200))
         );
@@ -27,7 +27,7 @@ public class warriorDatabaseSimulation extends Simulation {
     // Add the setUp block
     {
         setUp(
-            myScenario.injectOpen(constantUsersPerSec(2).during(60))
+            myScenario.injectOpen(rampUsersPerSec(50).to(1500).during(30))
         ).protocols(httpProtocol);
     }
 }
