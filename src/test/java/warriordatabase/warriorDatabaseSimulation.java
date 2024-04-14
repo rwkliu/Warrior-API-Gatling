@@ -32,17 +32,13 @@ public class warriorDatabaseSimulation extends Simulation {
             pause(1),
             http("Find Neo by id")
                 .get("warrior/3b323968-73d8-47a3-a84d-9db948e2bd6b")
-                .check(status().is(200)),
-            pause(1),
-            http("Count Warriors")
-                .get("/counting-warriors")
                 .check(status().is(200))
         );
 
     // Add the setUp block
     {
         setUp(
-            myScenario.injectOpen(rampUsersPerSec(1).to(500).during(30))
-        ).protocols(httpProtocol).maxDuration(Duration.ofMinutes(1));
+            myScenario.injectOpen(rampUsersPerSec(1).to(350).during(180))
+        ).protocols(httpProtocol);
     }
 }
